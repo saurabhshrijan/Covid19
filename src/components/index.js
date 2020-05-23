@@ -1,12 +1,11 @@
-import React,{useState} from 'react';
+import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import Box from '@material-ui/core/Box';
+ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
         transform: 'translateY(-110%)',
         transition: 'transform .5s',
       },
+      paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+      }
   }));
 
 export default function NavigationBar(props) {
@@ -33,17 +37,14 @@ export default function NavigationBar(props) {
   return (
     <React.Fragment>
           <CssBaseline />
-        <AppBar className={trigger ? classes.show : classes.hide}>
+              {/* <AppBar> */}
+              <AppBar className={trigger ? classes.show : classes.hide}>
           <Toolbar variant="dense" >
             <Typography variant="h6">Covid19 Pandemic</Typography>
           </Toolbar>
-        </AppBar>
-      <Toolbar />
-      <Container maxWidth="md">
-        <Box my={2} >
-         
-        </Box>
-      </Container>
+        </AppBar> 
+              
+     
     </React.Fragment>
   );
 }
