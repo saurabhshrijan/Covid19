@@ -1,14 +1,18 @@
 import React from 'react';
-import NavigationBar from "./components/index";
+import NavigationBar from "./components/index.jsx";
 import './App.css';
-import MainContent from './components/main';
-
+import MainContent from './components/main/index.jsx';
+import {Provider} from "react-redux";
+import store from './redux/store';
 function App() {
   return (
+    <Provider store={store}>
     <div className="App">
-      <NavigationBar />
-      <MainContent/>
+    <NavigationBar />
+    <MainContent/>
     </div>
+      </Provider>
+   
 
   );
 }
