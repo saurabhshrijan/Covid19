@@ -189,9 +189,9 @@ selectedState = (selectedDistricts)=>{
         //console.log('inside if');
         const data=this.props.allStateData;
         //console.log('aloo',data);
-        // rows=data.map((val,index)=>{
-        //  return this.createData(val.state,val.confirmed,val.active,val.recovered,val.deaths)
-        // });
+        rows=data.map((val,index)=>{
+         return this.createData(val.state,val.confirmed,val.active,val.recovered,val.deaths)
+        });
         //console.log('gghh',rows);
 
       }
