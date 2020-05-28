@@ -4,6 +4,7 @@ import './App.css';
 import MainContent from './components/main/index.jsx';
 import {Provider} from "react-redux";
 import store from './redux/store';
+require('typeface-roboto')
 function App() {
   return (
     <Provider store={store}>

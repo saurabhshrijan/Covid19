@@ -10,13 +10,18 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 // import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 // import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 // import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 // import { withStyles } from '@material-ui/core/styles';
 import Row from "./TableContent";
 import {connect} from "react-redux";
+import { withStyles } from '@material-ui/core/styles';
 import {clearAllStateDistrictData, getAllStateDistrictData} from "../../redux/action";
 
 
@@ -57,24 +62,70 @@ import {clearAllStateDistrictData, getAllStateDistrictData} from "../../redux/ac
 // state: "Maharashtra"
 // statecode: "MH"
 
+
+const Styles =(theme)=>({
+  
+  Paper: {
+    width: '100%',
+    marginBottom: theme.spacing(2),
+  },
+  table: {
+    minWidth: 500
+  },
+  root: {
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+    }
+  }
+})
+
+
 class CollapsibleTable extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      districtData:[]
+      districtData:[],
+      page:0,
+      rowsPerPage:5
     }
+    
     this.createData=this.createData.bind(this);
     this.createDistricts=this.createDistricts.bind(this);
     this.selectedState=this.selectedState.bind(this);
+    this.setPage=this.setPage.bind(this);
+    this.setRowsPerPage=this.setRowsPerPage.bind(this);
+    this.handleChangePage=this.handleChangePage.bind(this);
+    this.handleChangeRowsPerPage=this.handleChangeRowsPerPage.bind(this);
   }
+ 
+  
+  setPage =(newPage)=>{
+    this.setState({page:newPage})
+  }
+
+
+  setRowsPerPage =(rowsPerPage)=>{
+  this.setState({rowsPerPage:rowsPerPage});
+}
+
+
+
+  handleChangePage = (event, newPage) => {
+    this.setPage(newPage);
+  };
   
 
 
+   handleChangeRowsPerPage = (event) => {
+    this.setRowsPerPage(parseInt(event.target.value, 10));
+    this.setPage(0);
+  };
+
+
+
+
  createData = (state, confirmed,active, recovered, deaths)=>{
-   //console.log('inside createdata');
-  // if(this.props.allStateDistrictData!==undefined){
-  //   console.log('chicken',this.props.allStateDistrictData);
-  // }
   return {
     state,
     confirmed,
@@ -83,6 +134,8 @@ class CollapsibleTable extends React.Component {
     deaths
   };
 }
+
+
 
 
 createDistricts =(name,confirmed,active,recovered,deaths)=>{
@@ -95,10 +148,12 @@ createDistricts =(name,confirmed,active,recovered,deaths)=>{
       }
 }
 
+
+
 componentDidMount(){
   this.props.getAllStateDistrictData();
-  
 }
+
 selectedState = (selectedDistricts)=>{
   console.log(selectedDistricts.districtData);
   //this.setState({rawdata:selectedDistricts},()=>console.log('state becomes',this.state));
@@ -126,19 +181,23 @@ selectedState = (selectedDistricts)=>{
     return x;
 }
     render(){
+      const {classes} = this.props
       let rows=[]
       //console.log('value of ',this.props);
       if(this.props.allStateData !== undefined){
         //this.props.getAllcases()
+        //console.log('inside if');
         const data=this.props.allStateData;
-        rows=data.splice(1).map((val,index)=>{
-         return this.createData(val.state,val.confirmed,val.active,val.recovered,val.deaths)
-        });
+        //console.log('aloo',data);
+        // rows=data.map((val,index)=>{
+        //  return this.createData(val.state,val.confirmed,val.active,val.recovered,val.deaths)
+        // });
+        //console.log('gghh',rows);
 
       }
         return (
-            <TableContainer component={Paper}>
-              <Table aria-label="collapsible table">
+            <TableContainer component={Paper} style={{marginBottom:"10px"}}>
+              <Table aria-label="collapsible table" className={classes.table}>
                 <TableHead>
                   <TableRow>
                     <TableCell />
@@ -149,14 +208,31 @@ selectedState = (selectedDistricts)=>{
                     <TableCell align="right">Deceased</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {rows.map((row) => (
+                {rows.length > 0  ? <TableBody>
+                  {rows.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((row) => (
                     <Row key={row.state}
                      row={row} 
                      selectedState={(selectedDistricts)=>this.selectedState(selectedDistricts)} 
                      />
                   ))}
                 </TableBody>
+              : <div className={classes.root}><TableBody><CircularProgress color="secondary" /></TableBody></div>
+              }
+                
+                
+                <TableFooter>
+                <TableRow>
+                    <TablePagination
+                        rowsPerPageOptions={[5, 10, 25]}
+                        count={rows.length}
+                        rowsPerPage={this.state.rowsPerPage}
+                        page={this.state.page}
+                        onChangePage={this.handleChangePage}
+                        onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    />
+                   </TableRow>
+                </TableFooter>
+                
               </Table>
             </TableContainer>
           );
@@ -164,7 +240,6 @@ selectedState = (selectedDistricts)=>{
 
 }
 const mapStateToProps =(state) =>{
-  //console.log('aloo',state.getAllData);
 return {
           allStateDistrictData:state.getAllData.stateDistrictWise,
           allStateData:state.getAllData.statewise
@@ -176,4 +251,4 @@ const mapDispatchToProps = dispatch =>{
     clearAllStateDistrictData:()=>dispatch(clearAllStateDistrictData())
   }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(CollapsibleTable);
+export default connect(mapStateToProps,mapDispatchToProps)(withStyles(Styles)(CollapsibleTable));

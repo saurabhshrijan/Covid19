@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Grid from '@material-ui/core/Grid';
 import { Paper } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+
 import CollapsibleTable from "./details";
 // import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
@@ -40,7 +42,7 @@ class MainContent extends Component {
       }
       
     render() {
-            const types=['confirmed','Active','Recovered','Deceased'];
+            const types=['Confirmed','Active','Recovered','Deceased'];
             // const {active,confirmed,recovered,death}=this.props.allStateData[0];
             const {classes} = this.props
         return (
@@ -48,28 +50,43 @@ class MainContent extends Component {
             <div className={classes.root}>
                 <Grid container justify="center" alignItems="center">
                     <Grid container item xs={12} spacing ={5} direction="row">
-                    <Grid item xs={3} md={3}>
+                    <Grid item xs={6} md={3}>
             <Paper className={classes.paper} square elevation={4}>
-                {types[0]}
-            <div> {this.props.allStateData[0]!==undefined ? this.props.allStateData[0].confirmed:""} </div>
+                <Typography 
+                    variant="h4" 
+                    component="h4"
+                >{types[0]}
+                </Typography>
+            <div> {this.props.allStateData[0]!==undefined ? <Typography varient="h1" component="h1">{this.props.allStateData[0].confirmed}</Typography>:""} </div>
                 </Paper>
                 </Grid>
-                <Grid item xs={3} md={3}>
+                <Grid item xs={6} md={3}>
                   <Paper className={classes.paper} square elevation={4}>
-                      {types[1]}
-                      <div> {this.props.allStateData[0]!==undefined ? this.props.allStateData[0].active:""} </div>  
+                  <Typography 
+                    variant="h4" 
+                    component="h4">{types[1]}
+                    </Typography>
+        <div> {this.props.allStateData[0]!==undefined ? <Typography varient="h1" component="h1">{this.props.allStateData[0].active}</Typography>:""} </div>  
                     </Paper>
                 </Grid>
-                <Grid item xs={3} md={3}>
+                <Grid item xs={6} md={3}>
             <Paper className={classes.paper} square elevation={4}>
-                {types[2]}
-                <div>{this.props.allStateData[0]!==undefined ? this.props.allStateData[0].recovered:""} </div>
+            <Typography 
+                    variant="h4" 
+                    component="h4"> 
+                    {types[2]}
+            </Typography>
+        <div>{this.props.allStateData[0]!==undefined ? <Typography varient="h1" component="h1">{this.props.allStateData[0].recovered}</Typography>:""} </div>
             </Paper>
                 </Grid>
-                <Grid item xs={3} md={3}>
+                <Grid item xs={6} md={3}>
             <Paper className={classes.paper} square elevation={4}>
+            <Typography 
+                    variant="h4" 
+                    component="h4">
                 {types[3]}
-                <div>{this.props.allStateData[0]!==undefined ? this.props.allStateData[0].deaths:""} </div>
+                </Typography>
+        <div>{this.props.allStateData[0]!==undefined ? <Typography varient="h1" component="h1">{this.props.allStateData[0].deaths}</Typography>:""} </div>
             </Paper>
                 </Grid>
                     </Grid>
