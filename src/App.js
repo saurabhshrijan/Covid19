@@ -13,8 +13,6 @@ function App() {
     <MainContent/>
     </div>
       </Provider>
-   
-
   );
 }
 
